@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Weather Forecast</title>
+        <meta charset="UTF-8">
+        <link href="WeatherForecast.css" rel="stylesheet">
+        <script type="text/javascript" src= "http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+
+                $('form').submit(function() {
+                    var input = $("#City_Name").val();
+                    var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + input + '&&appid=eab137406ac7013c57e08481acf48f14';
+                    inputArr = input.split(',');
+                    cityNameArr = inputArr[0].split(' ')
+                    for (var i = 0; i < cityNameArr.length; i++){
+                        cityNameArr[i] = cityNameArr[i].charAt(0).toUpperCase() + cityNameArr[i].slice(1);
+                    }
+                    cityName = cityNameArr.join(' ');
+                    $.get(url, function(res) {
+                        var temp = Math.round(((res.main.temp - 273.15) * 1.8) + 32);
+                        HTMLstring = '<h1>' + cityName + '</h1>';
+                        HTMLstring += '<h3>Temperature: ';
+                        HTMLstring += temp;
+                        HTMLstring += '<h3>';
+
+                        $("#displayArea").html(HTMLstring);
+                    }, 'json');
+                    return false;
+                });
+
+            });
+        </script>
+    </head>
+    <body>
+        <form action="process.php" method="post">  
+                
+            <input type="text" id="City_Name" name="City_Name" placeholder="City,State/Country">
+            <input id="submit" type="submit" value="Search Weather">
+
+        </form>
+        <div id="displayArea">
+
+        </div>
+    
+    </body>
+</html>
